@@ -25,6 +25,6 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
-            -Dsonar.projectKey=kiruthii_reactjs-app
-            -Dsonar.projectName=ReactJS App
+            -Dsonar.projectKey=reactjs-app-react
+            -Dsonar.projectName=reactjsapp
             -Dsonar.sources=src
