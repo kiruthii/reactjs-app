@@ -1,33 +1,29 @@
-pipeline{
+pipeline {
     agent any
-    
-    stages{
-        stage("Git Checkout"){
-            steps{
-                git url:"https://github.com/javahometech/reactjs-app",branch:"main"
+  
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git url:'https://github.com/kiruthii/reactjs-app.git',branch:"main"
             }
         }
-        stage("Docker Build"){
-            steps{
-                sh "docker build -t kammana/react-app:${currentBuild.number} ."
+        stage('NPM install') {
+            steps {
+                bat "npm install"
             }
         }
-        stage("Docker Push"){
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'docker_password', usernameVariable: 'docker_user')]) {
-                    sh "docker login -u ${docker_user} -p ${docker_password}"
-                }
-                sh "docker push kammana/react-app:${currentBuild.number}"
+        stage('Build') {
+            steps {
+                bat "npm run build"
             }
         }
-        stage("Dev Deploy"){
-            steps{
-                sshagent(['docker-dev']) {
+        stage('Vercel Deploy') {
+            steps {
+                bat 'curl -v -X POST https://api.vercel.com/v1/integrations/deploy/prj_xMQjTm0VAIqLu1GHoyhTGalKvIfo/9uP0Zhcrc6'
+
+            }
+        }
         
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.15.57 docker rm -f react 2>/dev/null "
-                    sh "ssh ec2-user@172.31.15.57 docker run -d -p 80:80 --name=react kammana/react-app:${currentBuild.number}"
-                }
-            }
-        }
     }
 }
