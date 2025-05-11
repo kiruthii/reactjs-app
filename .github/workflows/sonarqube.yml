@@ -33,4 +33,4 @@ jobs:
           args: >
             -Dsonar.projectKey=reactjs-app-react
             -Dsonar.projectName=reactjsapp
-            -Dsonar.sources=src  # Ensure 'src' exists
+            -Dsonar.sources=src
